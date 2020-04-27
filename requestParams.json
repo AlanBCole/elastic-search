@@ -1,0 +1,101 @@
+{
+    "query": {
+        "bool": {
+            "must": [{
+                "term": {
+                    "authors.organization.name.keyword": "Institute of Behavioral Science (IBS)"
+                }
+            }, {
+                "match_all": {}
+            }]
+        }
+    },
+    "sort": [{
+        "publicationDate": {
+            "order": "desc"
+        }
+    }],
+    "from": 0,
+    "size": 10,
+    "aggs": {
+        "mostSpecificType.keyword": {
+            "terms": {
+                "field": "mostSpecificType.keyword",
+                "size": 115,
+                "order": {
+                    "_count": "desc"
+                }
+            }
+        },
+        "authors.name.keyword": {
+            "terms": {
+                "field": "authors.name.keyword",
+                "size": 101,
+                "order": {
+                    "_count": "desc"
+                }
+            }
+        },
+        "publishedIn.name.keyword": {
+            "terms": {
+                "field": "publishedIn.name.keyword",
+                "size": 115,
+                "order": {
+                    "_count": "desc"
+                }
+            }
+        },
+        "publicationYear.keyword": {
+            "terms": {
+                "field": "publicationYear.keyword",
+                "size": 125,
+                "order": {
+                    "_count": "desc"
+                }
+            }
+        },
+        "authors.organization.name.keyword": {
+            "terms": {
+                "field": "authors.organization.name.keyword",
+                "size": 115,
+                "order": {
+                    "_count": "desc"
+                }
+            }
+        },
+        "authors.researchArea.name.keyword": {
+            "terms": {
+                "field": "authors.researchArea.name.keyword",
+                "size": 115,
+                "order": {
+                    "_count": "desc"
+                }
+            }
+        },
+        "cuscholarexists.keyword": {
+            "terms": {
+                "field": "cuscholarexists.keyword",
+                "size": 115,
+                "order": {
+                    "_count": "desc"
+                }
+            }
+        },
+        "amscore": {
+            "range": {
+                "field": "amscore",
+                "ranges": [{
+                    "to": 0.001
+                }, {
+                    "to": 100,
+                    "from": 0.001
+                }, {
+                    "to": 500,
+                    "from": 100
+                }, {
+                    "from": 500
+                }]
+            }
+        }
+    }
+}
