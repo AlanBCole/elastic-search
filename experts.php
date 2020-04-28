@@ -3,24 +3,16 @@
     
     // request options
     $searchParams = [
-        'query' => [
-            'bool' => [
-                'must' => [
-                    ['term' => ['email' => 'mark.hernandez@Colorado.EDU']]
-                ],
-            ],
-        ],
+        'q' => 'givenName:mark OR researchArea:"Environmental Sciences"'
     ];
-
+    
     $query = http_build_query($searchParams);
     $fullUrl = $url . "?" . $query;
 
     $request = curl_init();
     curl_setopt($request, CURLOPT_URL, $fullUrl);
     curl_setopt($request, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    // curl_setopt($request, CURLOPT_POSTFIELDS, json_encode($searchParams));
     curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
-    // curl_setopt($request, CURLOPT_VERBOSE, true);
 
     $response = curl_exec($request);
     $reqStatus = curl_getinfo($request);
@@ -38,18 +30,17 @@
     <title>ES - Experts</title>
 </head>
 <body>
-    <?php if (isset($parsedResponse->aksdfasdjkf)): ?>
+    <?php if (isset($parsedResponse->hits->hits)): ?>
 
-        <p>A request to: <?php echo $url; ?><p>
+        <p>A request to: <?php echo $fullUrl; ?><p>
         <ol>
 
-            <?php foreach ($parsedResponse->data as $artwork): ?>
-                <li><h3><?php echo $artwork->artist_title ? $artwork->artist_title : 'Anonymous'; ?></h3> 
+            <?php foreach ($parsedResponse->hits->hits as $person): ?>
+                <li><?php echo isset($person->_source->thumbnail) ? '<img src="' . $person->_source->thumbnail . '"/>' : '<p>No Picture Available</p>'; ?> 
                     <ul>
-                        <li style="list-style: none">Title: <?php echo $artwork->title; ?></li>
-                        <li style="list-style: none">Date: <?php echo $artwork->date_display; ?></li>
-                        <li style="list-style: none">ID: <?php echo $artwork->id; ?></li>
-                        <li style="list-style: none">Image ID: <?php echo $artwork->image_id; ?></li>
+                        <li style="list-style: none">Name: <?php echo isset($person->_source->name) ? $person->_source->name : 'No Name Available'; ?></li>
+                        <li style="list-style: none">Email: <?php echo isset($person->_source->email) ? $person->_source->email : 'No Email Available'; ?></li>
+                        <li style="list-style: none">Website: <?php echo isset($person->_source->website) ? $person->_source->website : 'No Website Available'; ?></li>
                     </ul>
                 </li>
             <?php endforeach; ?>
@@ -63,6 +54,7 @@
                 echo var_dump($parsedResponse); 
                 echo var_dump($reqStatus);
                 echo json_encode($searchParams, JSON_PRETTY_PRINT);
+                echo '<br/>' . $fullUrl;
             ?>
         </div>
 
