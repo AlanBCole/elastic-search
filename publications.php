@@ -1,9 +1,9 @@
 <?php 
-    $url = 'https://experts.colorado.edu/es/fis/_search';
+    $url = 'https://experts.colorado.edu/es/fispubs-v1/_search';
     
     // request options
     $searchParams = [
-        'q' => 'name:mark OR researchArea:"Environmental Sciences"'
+        'q' => 'citedAuthors:(Kim AND Massey) AND publicationDate:[2007 TO 2020]'
     ];
     
     $query = http_build_query($searchParams);
@@ -27,25 +27,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ES - Experts</title>
+    <title>ES - Publications</title>
 </head>
 <body>
     <?php if (isset($parsedResponse->hits->hits)): ?>
 
-        <p>A request to: <?php echo $fullUrl; ?><p>
-        <ol>
-
-            <?php foreach ($parsedResponse->hits->hits as $person): ?>
-                <li><?php echo isset($person->_source->thumbnail) ? '<img src="' . $person->_source->thumbnail . '"/>' : '<p>No Picture Available</p>'; ?> 
-                    <ul>
-                        <li style="list-style: none">Name: <?php echo isset($person->_source->name) ? $person->_source->name : 'No Name Available'; ?></li>
-                        <li style="list-style: none">Email: <?php echo isset($person->_source->email) ? $person->_source->email : 'No Email Available'; ?></li>
-                        <li style="list-style: none">Website: <?php echo isset($person->_source->website) ? $person->_source->website : 'No Website Available'; ?></li>
-                    </ul>
-                </li>
-            <?php endforeach; ?>
-
-        </ol>
+        <div style="color: green">
+            <?php 
+                foreach ($parsedResponse->hits->hits as $hit) {
+                    echo '<div style="border-bottom: 2px solid green;">';
+                    echo '<p>' . $hit->_source->citedAuthors . '</p>';
+                    echo '<p>' . $hit->_source->publicationDate . '</p>';
+                    echo '</div>'; 
+                }
+            ?>
+        </div>
 
     <?php else: ?>
 

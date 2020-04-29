@@ -1,0 +1,13 @@
+{
+    "name": "alco6164/elastic-search",
+    "description": "Figuring out how to send elastic search queries in vanilla php",
+    "authors": [
+        {
+            "name": "alco6164",
+            "email": "alan.cole@colorado.edu"
+        }
+    ],
+    "require": {
+        "elasticsearch/elasticsearch": "^7.6"
+    }
+}

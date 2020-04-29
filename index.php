@@ -10,6 +10,7 @@
     <nav>
         <p><a href="art.php">Art</a></p>
         <p><a href="experts.php">Experts</a></p>
+        <p><a href="publications.php">Publications</a></p>
     </nav>
 </body>
 </html>
